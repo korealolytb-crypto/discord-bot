@@ -1,3 +1,4 @@
+import os
 import discord
 from discord.ext import commands
 
@@ -18,7 +19,8 @@ KEYWORD_MAP = {
     "[LV.100]": "정복자 Lv.100",
 }
 
-BOT_TOKEN = ""
+# Railway 환경 변수(Variables)에서 BOT_TOKEN을 안전하게 불러오도록 수정
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 # ==========================================================
 
 async def check_and_assign_role(member: discord.Member):
@@ -46,4 +48,7 @@ async def on_member_update(before: discord.Member, after: discord.Member):
     if before.display_name != after.display_name:
         await check_and_assign_role(after)
 
-bot.run(BOT_TOKEN)
+if BOT_TOKEN:
+    bot.run(BOT_TOKEN)
+else:
+    print("[오류] BOT_TOKEN 환경 변수가 설정되지 않았습니다!")
